@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-// Node class representing each node in the binary tree
+// Node class representing each node in the binary search tree
 class Node {
     int value;
     Node left, right;
@@ -13,29 +13,42 @@ class Node {
     }
 }
 
-// Binary Tree class
-class BinaryTree {
+// Binary Search Tree class
+class BinarySearchTree {
     Node root;
 
-    public BinaryTree() {
+    public BinarySearchTree() {
         root = null;
     }
 
-    // Insert method to build the tree based on the input array
+    // Insert method to build the BST based on the input array
     public void insert(int[] values) {
-        if (values.length == 0) return;
-        root = insertRec(values, 0);
+        for (int value : values) {
+            if (value != -1) {
+                insertRec(value);
+            }
+        }
     }
 
-    // Recursive method to insert values into the tree
-    private Node insertRec(int[] values, int index) {
-        if (index < values.length && values[index] != -1) { // -1 indicates no input
-            Node node = new Node(values[index]);
-            node.left = insertRec(values, 2 * index + 1);  // Left child
-            node.right = insertRec(values, 2 * index + 2); // Right child
-            return node;
+    // Recursive method to insert values into the BST
+    private void insertRec(int value) {
+        root = insertNode(root, value);
+    }
+
+    // Helper method to insert a node into the BST
+    private Node insertNode(Node root, int value) {
+        if (root == null) {
+            return new Node(value);
         }
-        return null;
+
+        if (value < root.value) {
+            root.left = insertNode(root.left, value);
+        } else if (value > root.value) {
+            root.right = insertNode(root.right, value);
+        }
+
+        // Ignore duplicate values
+        return root;
     }
 
     // Inorder Traversal
@@ -92,60 +105,41 @@ public class BinarySearchTreeProgram {
         String tryAgain;
 
         do {
-            BinaryTree bt = new BinaryTree();
-
-            // Input for the number of elements in the binary tree
-            System.out.print("Enter the total number of positions you want in the binary tree array: ");
-            int arraySize = scanner.nextInt();
+            BinarySearchTree bst = new BinarySearchTree();
 
             // Input for the number of elements to add
-            System.out.print("Enter the number of elements you want to add to the binary tree (max " + arraySize + "): ");
+            System.out.print("Enter the number of elements you want to add to the binary search tree: ");
             int n = scanner.nextInt();
-            while (n > arraySize) {
-                System.out.println("Invalid input. Please enter a number less than or equal to " + arraySize + ".");
-                System.out.print("Enter the number of elements you want to add to the binary tree (max " + arraySize + "): ");
-                n = scanner.nextInt();
-            }
 
-            // Input for the binary tree
-            int[] values = new int[arraySize]; // Array size for the binary tree
-            System.out.println("Enter " + n + " elements for the binary tree (use -1 for empty nodes). The remaining positions will be filled with -1.");
+            // Input for the binary search tree
+            int[] values = new int[n]; // Array for the binary search tree
+            System.out.println("Enter " + n + " elements for the binary search tree:");
             for (int i = 0; i < n; i++) {
                 System.out.print("Element at index " + i + ": ");
                 values[i] = scanner.nextInt();
             }
-            // Fill the remaining positions with -1
-            for (int i = n; i < arraySize; i++) {
-                values[i] = -1;
-            }
 
-            // Insert values into the binary tree
-            bt.insert(values);
-
-            // Display the 1-D array representation
-            System.out.println("\n1-D Array Representation of the Binary Tree:");
-            for (int value : values) {
-                System.out.print(value + " ");
-            }
+            // Insert values into the binary search tree
+            bst.insert(values);
 
             // Display traversals
-            System.out.println("\n\nPreorder Traversal:");
+            System.out.println("\nPreorder Traversal:");
             List<Integer> preorderResult = new ArrayList<>();
-            bt.preorder(preorderResult);
+            bst.preorder(preorderResult);
             System.out.println(preorderResult);
 
             System.out.println("Inorder Traversal:");
             List<Integer> inorderResult = new ArrayList<>();
-            bt.inorder(inorderResult);
+            bst.inorder(inorderResult);
             System.out.println(inorderResult);
 
             System.out.println("Postorder Traversal:");
             List<Integer> postorderResult = new ArrayList<>();
-            bt.postorder(postorderResult);
+            bst.postorder(postorderResult);
             System.out.println(postorderResult);
 
             System.out.println("Sorted Array Representation (Inorder Traversal):");
-            int[] sortedArray = bt.toArray();
+            int[] sortedArray = bst.toArray();
             System.out.println(java.util.Arrays.toString(sortedArray));
 
             System.out.print("\nDo you want to try again? (yes/no): ");
