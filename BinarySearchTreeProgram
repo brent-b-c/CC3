@@ -1,0 +1,151 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+// Node class representing each node in the binary tree
+class Node {
+    int value;
+    Node left, right;
+
+    public Node(int value) {
+        this.value = value;
+        left = right = null;
+    }
+}
+
+// Binary Tree class
+class BinaryTree {
+    Node root;
+
+    public BinaryTree() {
+        root = null;
+    }
+
+    // Insert method to build the tree based on the input array
+    public void insert(int[] values) {
+        if (values.length == 0) return;
+        root = insertRec(values, 0);
+    }
+
+    // Recursive method to insert values into the tree
+    private Node insertRec(int[] values, int index) {
+        if (index < values.length && values[index] != -1) { // -1 indicates no input
+            Node node = new Node(values[index]);
+            node.left = insertRec(values, 2 * index + 1);  // Left child
+            node.right = insertRec(values, 2 * index + 2); // Right child
+            return node;
+        }
+        return null;
+    }
+
+    // Inorder Traversal
+    public void inorder(List<Integer> result) {
+        inorderRec(root, result);
+    }
+
+    private void inorderRec(Node root, List<Integer> result) {
+        if (root != null) {
+            inorderRec(root.left, result);
+            result.add(root.value);
+            inorderRec(root.right, result);
+        }
+    }
+
+    // Preorder Traversal
+    public void preorder(List<Integer> result) {
+        preorderRec(root, result);
+    }
+
+    private void preorderRec(Node root, List<Integer> result) {
+        if (root != null) {
+            result.add(root.value);
+            preorderRec(root.left, result);
+            preorderRec(root.right, result);
+        }
+    }
+
+    // Postorder Traversal
+    public void postorder(List<Integer> result) {
+        postorderRec(root, result);
+    }
+
+    private void postorderRec(Node root, List<Integer> result) {
+        if (root != null) {
+            postorderRec(root.left, result);
+            postorderRec(root.right, result);
+            result.add(root.value);
+        }
+    }
+
+    // Convert BST to 1-D array representation
+    public int[] toArray() {
+        List<Integer> result = new ArrayList<>();
+        inorder(result); // Using inorder traversal to get sorted order
+        return result.stream().mapToInt(i -> i).toArray();
+    }
+}
+
+// Main class to run the program
+public class BinarySearchTreeProgram {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String tryAgain;
+
+        do {
+            BinaryTree bt = new BinaryTree();
+
+            // Input for the number of elements in the binary tree
+            System.out.print("Enter the number of elements for the binary tree: ");
+            int n = scanner.nextInt();
+
+            // Calculate the size of the array needed to represent the binary tree
+            int arraySize = (int) Math.pow(2, (int) Math.ceil(Math.log(n + 1) / Math.log(2))) - 1;
+
+            if (arraySize > n) {
+                System.out.println("Note: The binary tree will be represented with " + arraySize + " elements, where some might be empty (-1).");
+            }
+
+            // Input for the binary tree
+            int[] values = new int[arraySize]; // Array size for the binary tree
+            System.out.println("Enter " + arraySize + " elements for the binary tree (use -1 for empty nodes):");
+            for (int i = 0; i < arraySize; i++) {
+                System.out.print("Element at index " + i + ": ");
+                values[i] = scanner.nextInt();
+            }
+
+            // Insert values into the binary tree
+            bt.insert(values);
+
+            // Display the 1-D array representation
+            System.out.println("\n1-D Array Representation of the Binary Tree:");
+            for (int value : values) {
+                System.out.print(value + " ");
+            }
+
+            // Display traversals
+            System.out.println("\n\nPreorder Traversal:");
+            List<Integer> preorderResult = new ArrayList<>();
+            bt.preorder(preorderResult);
+            System.out.println(preorderResult);
+
+            System.out.println("Inorder Traversal:");
+            List<Integer> inorderResult = new ArrayList<>();
+            bt.inorder(inorderResult);
+            System.out.println(inorderResult);
+
+            System.out.println("Postorder Traversal:");
+            List<Integer> postorderResult = new ArrayList<>();
+            bt.postorder(postorderResult);
+            System.out.println(postorderResult);
+
+            System.out.println("Sorted Array Representation (Inorder Traversal):");
+            int[] sortedArray = bt.toArray();
+            System.out.println(java.util.Arrays.toString(sortedArray));
+
+            System.out.print("\nDo you want to try again? (yes/no): ");
+            tryAgain = scanner.next();
+        } while (tryAgain.equalsIgnoreCase("yes"));
+
+        scanner.close();
+    }
+}
