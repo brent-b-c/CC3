@@ -95,22 +95,28 @@ public class BinarySearchTreeProgram {
             BinaryTree bt = new BinaryTree();
 
             // Input for the number of elements in the binary tree
-            System.out.print("Enter the number of elements for the binary tree: ");
+            System.out.print("Enter the total number of positions you want in the binary tree array: ");
+            int arraySize = scanner.nextInt();
+
+            // Input for the number of elements to add
+            System.out.print("Enter the number of elements you want to add to the binary tree (max " + arraySize + "): ");
             int n = scanner.nextInt();
-
-            // Calculate the size of the array needed to represent the binary tree
-            int arraySize = (int) Math.pow(2, (int) Math.ceil(Math.log(n + 1) / Math.log(2))) - 1;
-
-            if (arraySize > n) {
-                System.out.println("Note: The binary tree will be represented with " + arraySize + " elements, where some might be empty (-1).");
+            while (n > arraySize) {
+                System.out.println("Invalid input. Please enter a number less than or equal to " + arraySize + ".");
+                System.out.print("Enter the number of elements you want to add to the binary tree (max " + arraySize + "): ");
+                n = scanner.nextInt();
             }
 
             // Input for the binary tree
             int[] values = new int[arraySize]; // Array size for the binary tree
-            System.out.println("Enter " + arraySize + " elements for the binary tree (use -1 for empty nodes):");
-            for (int i = 0; i < arraySize; i++) {
+            System.out.println("Enter " + n + " elements for the binary tree (use -1 for empty nodes). The remaining positions will be filled with -1.");
+            for (int i = 0; i < n; i++) {
                 System.out.print("Element at index " + i + ": ");
                 values[i] = scanner.nextInt();
+            }
+            // Fill the remaining positions with -1
+            for (int i = n; i < arraySize; i++) {
+                values[i] = -1;
             }
 
             // Insert values into the binary tree
