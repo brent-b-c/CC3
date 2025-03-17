@@ -1,0 +1,113 @@
+import javax.swing.JOptionPane;
+
+// Abstract class
+abstract class Payment {
+    protected double amount;
+    protected String accountNumber;
+
+    public Payment(double amount, String accountNumber) {
+        this.amount = amount;
+        this.accountNumber = accountNumber;
+    }
+
+    public abstract void processPayment();
+}
+
+// Subclass for different types of payment
+class CreditCardPayment extends Payment {
+    public CreditCardPayment(double amount, String cardNumber) {
+        super(amount, cardNumber);
+    }
+
+    @Override
+    public void processPayment() {
+        JOptionPane.showMessageDialog(null, "Processing credit card payment of $" + amount);
+    }
+}
+
+// Subclass for debit payment
+class DebitCardPayment extends Payment {
+    public DebitCardPayment(double amount, String cardNumber) {
+        super(amount, cardNumber);
+    }
+
+    @Override
+    public void processPayment() {
+        JOptionPane.showMessageDialog(null, "Processing debit card payment of $" + amount);
+    }
+}
+
+// Subclass for wallet payment
+class DigitalWalletPayment extends Payment {
+    public DigitalWalletPayment(double amount, String walletID) {
+        super(amount, walletID);
+    }
+
+    @Override
+    public void processPayment() {
+        JOptionPane.showMessageDialog(null, "Processing digital wallet payment of $" + amount);
+    }
+}
+
+// Main class
+public class PaymentProcessor {
+    public static void main(String[] args) {
+        boolean continuePayment = true;
+
+        while (continuePayment) {
+            String[] options = {"Credit Card", "Debit Card", "Digital Wallet", "Exit"};
+            String choice = (String) JOptionPane.showInputDialog(null, "Choose a payment method:",
+                    "Payment Method", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+            if (choice == null || choice.equals("Exit")) {
+                JOptionPane.showMessageDialog(null, "Exiting payment system. Thank you!");
+                break;
+            }
+
+            double amount = getAmountFromUser();
+            Payment payment = null;
+            String accountNumber = "";
+
+            switch (choice) {
+                case "Credit Card":
+                    accountNumber = JOptionPane.showInputDialog("Enter credit card number:");
+                    payment = new CreditCardPayment(amount, accountNumber);
+                    break;
+                case "Debit Card":
+                    accountNumber = JOptionPane.showInputDialog("Enter debit card number:");
+                    payment = new DebitCardPayment(amount, accountNumber);
+                    break;
+                case "Digital Wallet":
+                    accountNumber = JOptionPane.showInputDialog("Enter digital wallet ID:");
+                    payment = new DigitalWalletPayment(amount, accountNumber);
+                    break;
+            }
+
+            if (payment != null) {
+                payment.processPayment();
+                JOptionPane.showMessageDialog(null, "Payment successful!\nAccount Number: " + accountNumber + "\nAmount Paid: $" + amount + "\nThank you for your transaction.");
+            }
+
+            int continueChoice = JOptionPane.showConfirmDialog(null, "Do you want to make another payment?", "Continue Payment", JOptionPane.YES_NO_OPTION);
+            if (continueChoice == JOptionPane.NO_OPTION) {
+                JOptionPane.showMessageDialog(null, "Exiting payment system. Thank you!");
+                continuePayment = false;
+            }
+        }
+    }
+
+    private static double getAmountFromUser() {
+        while (true) {
+            try {
+                String input = JOptionPane.showInputDialog("Enter amount:");
+                if (input == null) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid amount.");
+                    continue;
+                }
+                return Double.parseDouble(input);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid number.");
+            }
+        }
+    }
+}
