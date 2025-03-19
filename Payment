@@ -1,0 +1,15 @@
+
+// Abstract class
+abstract class Payment {
+    protected double amount;
+    protected String accountNumber;
+    protected int passcode;
+
+    public Payment(double amount, String accountNumber) {
+        this.amount = amount;
+        this.accountNumber = accountNumber;
+        this.passcode = 0; 
+    }
+
+    public abstract void processPayment();
+}
