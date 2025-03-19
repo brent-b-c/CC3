@@ -1,0 +1,14 @@
+import javax.swing.JOptionPane;
+
+// Subclass for debit payment
+class DebitCardPayment extends Payment {
+    public DebitCardPayment(double amount, String cardNumber, int passcode) {
+        super(amount, cardNumber);
+        this.passcode = passcode;
+    }
+
+    @Override
+    public void processPayment() {
+        JOptionPane.showMessageDialog(null, "Processing debit card payment of $" + amount);
+    }
+}
