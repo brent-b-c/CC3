@@ -1,0 +1,11 @@
+import javax.swing.JOptionPane;
+
+class CreditCardPayment extends Payment {
+    public CreditCardPayment(double amount, String cardNumber) {
+        super(amount, cardNumber);
+    }
+
+    @Override
+    public void processPayment() {
+        JOptionPane.showMessageDialog(null, "Processing credit card payment of $" + amount);
+    }
