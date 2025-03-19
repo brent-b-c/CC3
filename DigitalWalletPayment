@@ -1,0 +1,13 @@
+import javax.swing.JOptionPane;
+
+// Subclass for wallet payment
+class DigitalWalletPayment extends Payment {
+    public DigitalWalletPayment(double amount, String walletID) {
+        super(amount, walletID);
+    }
+
+    @Override
+    public void processPayment() {
+        JOptionPane.showMessageDialog(null, "Processing digital wallet payment of $" + amount);
+    }
+}
